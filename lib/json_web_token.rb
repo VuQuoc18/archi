@@ -1,6 +1,6 @@
 class JsonWebToken
   class << self
-    SECRET_KEY_BASE = Settings.application.secret_base
+    SECRET_KEY_BASE = Rails.application.credentials.secret_key_base
     def encode payload
       JWT.encode payload, SECRET_KEY_BASE
     end

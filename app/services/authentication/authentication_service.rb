@@ -13,7 +13,7 @@ class Authentication::AuthenticationService < ApplicationService
 
   def login
     if valid_password?
-      customer.generate_token
+      generate_token
     else
       render_json :unauthorized, "Email hoặc mật khẩu không đúng"
     end
@@ -24,17 +24,16 @@ class Authentication::AuthenticationService < ApplicationService
   end
 
   def sign_in_params
-    params.permit(:email, :password)
+    params.permit(:username, :password)
   end
 
   def generate_token
     authentication_token = Authentication::GenerateAuthenticationToken.generate_token
-    customer.update authentication_token: authentication_token, last_login_at: Time.zone.now
+    customer.update authentication_token: authentication_token
 
-    access_token = JsonWebToken.encode customer_id: customer.id, authentication_token: authentication_token, exp: exp
+    access_token = JsonWebToken.encode customer_id: customer.id, authentication_token: authentication_token
     {
-     access_token: access_token,
-     exp: exp
+     access_token: access_token
     }
   end
 

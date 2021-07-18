@@ -1,6 +1,7 @@
 class Api::V1::Customer::BaseController < ApplicationController
   include SerializerHelper
   include ExceptionHandler
+
   attr_reader :current_customer
 
   before_action :authorize_request
@@ -30,7 +31,7 @@ class Api::V1::Customer::BaseController < ApplicationController
   def http_auth_header
     return request.headers["Authorization"].split.last if request.headers["Authorization"].present?
 
-    render_json :unauthorized, "unauthorize_request"
+    raise ExceptionHandler::InvalidToken
   end
 
   def render_json status, message = "", data = nil
