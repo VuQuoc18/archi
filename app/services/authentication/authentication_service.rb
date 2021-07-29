@@ -24,7 +24,7 @@ class Authentication::AuthenticationService < ApplicationService
   end
 
   def sign_in_params
-    params.permit(:username, :password)
+    params.permit(:email, :password)
   end
 
   def generate_token
